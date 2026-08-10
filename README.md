@@ -1,54 +1,36 @@
-# My OS
+# My OS – Stoic Edition
 
-A simple operating system-like interface in your browser. Built from scratch with HTML, CSS, and JavaScript.
+I built a simple operating system-like interface in the browser. It has a clock, weather, search bar, and a few apps that open in draggable windows. I wanted something clean and high-contrast, so I went with a black-and-white Nothing-style design.
 
-## Features
+## What's Inside
 
-- 🕐 **Live Clock** - Updates every second
-- 🌤️ **Weather** - Simulated temperature with random icons
-- 🔍 **Search** - Opens Google with your query
-- 🏓 **Ping Pong** - 2-player game (W/S and Arrow keys)
-- 📝 **Notes** - Write and save notes
-- 🧮 **Calculator** - Basic math operations
-- ℹ️ **About** - Project info
-- 🖱️ **Draggable Windows** - Move windows around
+- **Clock** – shows live time
+- **Weather** – random temp with icons (just for fun)
+- **Search** – opens Google
+- **Notes** – saves to localStorage
+- **Calculator** – basic math
+- **Timer** – countdown with start/stop/reset
+- **Todo** – saves tasks to localStorage
+- **Ping Pong** – 2-player game (W/S and arrow keys)
+- **About** – project info
 
-## Controls
+All apps open in separate windows that you can drag around.
 
-| Player | Move Up | Move Down |
-|--------|---------|-----------|
-| Left Paddle | `W` | `S` |
-| Right Paddle | `↑` | `↓` |
+## How I Built It
 
-## Tech Stack
-
-- HTML5
-- CSS3 (Nothing OS style)
-- JavaScript (Vanilla)
-- GitHub Pages
-
-## Live Demo
-
-[https://anshum2422.github.io/my-os/](https://anshum2422.github.io/my-os/)
-
-## GitHub Repo
-
-[https://github.com/anshum2422/my-os](https://github.com/anshum2422/my-os)
+I used HTML, CSS, and JavaScript. No frameworks. The design is inspired by Nothing OS — clean, monochrome, and minimal. I added draggable windows and localStorage for notes and todos as my own features.
 
 ## What I Learned
 
-- Building a multi-window interface
-- Making elements draggable
-- Creating a 2-player game with canvas
-- Simulating weather data
-- Designing a clean, minimal UI
+- How to make elements draggable with mouse events
+- How to use localStorage to save data
+- How to build a simple game with canvas
+- How to keep a UI clean and consistent
 
-## Next Steps
+## Live Demo
 
-- Add more apps (music player, timer)
-- Save notes to localStorage
-- Add a taskbar
+https://anshum2422.github.io/my-os/
 
----
+## GitHub Repo
 
-Built by @anshum_2422
+https://github.com/anshum2422/my-os
