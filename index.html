@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My OS</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="os">
+
+        <div id="topbar">
+            <div id="time">00:00:00</div>
+            <div id="weather">☀️ 22°C</div>
+        </div>
+
+        <div id="search-container">
+            <input type="text" id="search" placeholder="Search...">
+            <button onclick="search()">Go</button>
+        </div>
+
+        <div id="apps">
+            <div class="app" onclick="openPingPong()">🏓 Ping Pong</div>
+        </div>
+
+        <div id="game" style="display:none;">
+            <div id="game-header">
+                <span>🏓 Ping Pong</span>
+                <button onclick="closeGame()">✕</button>
+            </div>
+            <canvas id="pong" width="600" height="400"></canvas>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
