@@ -1,4 +1,4 @@
-# My OS – Stoic Edition
+OS – Stoic
 
 I built a simple operating system-like interface in the browser. It has a clock, weather, search bar, and a few apps that open in draggable windows. I wanted something clean and high-contrast, so I went with a black-and-white Nothing-style design.
 
