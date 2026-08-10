@@ -461,6 +461,39 @@ function initPong(id) {
             ballSpeedX = 4 * (Math.random() > 0.5 ? 1 : -1);
             ballSpeedY = 3 * (Math.random() > 0.5 ? 1 : -1);
         }
+ 
+
+            function showQuote() {
+             const quotes = [
+            "Code is poetry.",
+             "Keep building.",
+        "Small steps count.",
+        "You got this.",
+        "Progress over rfection.",
+        "Make it work, then make it better.",
+        "Every expert was once a beginner.",
+        "Done is better than perfect.",
+        "The best time to start was yesterday. The next best is now.",
+        "Fall seven times, stand up eight."
+    ];
+    const random = Math.floor(Math.random() * quotes.length);
+    const quoteEl = document.getElementById('quote');
+    if (quoteEl) {
+        quoteEl.textContent = '💬 ' + quotes[random];
+    }
+}
+
+// Call it when the page loads
+showQuote();
+
+
+
+
+
+
+
+        
+
 
         pongAnimations[id] = requestAnimationFrame(draw);
     }
