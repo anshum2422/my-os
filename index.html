@@ -9,26 +9,31 @@
 
     <div id="os">
 
+        <!-- Top Bar -->
         <div id="topbar">
             <div id="time">00:00:00</div>
             <div id="weather">☀️ 22°C</div>
         </div>
 
+        <!-- Search -->
         <div id="search-container">
             <input type="text" id="search" placeholder="Search...">
             <button onclick="search()">Go</button>
         </div>
 
+        <!-- Apps -->
         <div id="apps">
-            <div class="app" onclick="openPingPong()">🏓 Ping Pong</div>
+            <div class="app" onclick="openApp('notes')">📝 Notes</div>
+            <div class="app" onclick="openApp('calc')">🧮 Calculator</div>
+            <div class="app" onclick="openApp('timer')">⏱️ Timer</div>
+            <div class="app" onclick="openApp('todo')">✅ To-do List</div>
+            <div class="app" onclick="openApp('pong')">🏓 Ping-Pong</div>
+            <div class="app" onclick="openApp('about')">ℹ️ About</div>
         </div>
 
-        <div id="game" style="display:none;">
-            <div id="game-header">
-                <span>🏓 Ping Pong</span>
-                <button onclick="closeGame()">✕</button>
-            </div>
-            <canvas id="pong" width="600" height="400"></canvas>
+        <!-- App Content Area -->
+        <div id="app-content">
+            <p style="color:#555; text-align:center; padding:40px 0;">Click an app to open it</p>
         </div>
 
     </div>

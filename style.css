@@ -24,6 +24,8 @@ body {
     border: 1px solid #222222;
     box-shadow: 0 20px 60px rgba(0,0,0,0.9);
 }
+
+/* Top Bar */
 #topbar {
     display: flex;
     justify-content: space-between;
@@ -37,12 +39,13 @@ body {
 
 #time {
     color: #ffffff;
-    font-weight: 400;
 }
 
 #weather {
     color: #aaaaaa;
 }
+
+/* Search */
 #search-container {
     display: flex;
     gap: 10px;
@@ -64,7 +67,6 @@ body {
 
 #search::placeholder {
     color: #444444;
-    font-weight: 300;
 }
 
 #search:focus {
@@ -88,21 +90,22 @@ body {
 #search-container button:hover {
     background: #333333;
 }
+
+/* Apps */
 #apps {
     display: flex;
-    gap: 14px;
+    gap: 12px;
     flex-wrap: wrap;
-    margin-top: 6px;
+    margin-bottom: 24px;
 }
 
 .app {
     background: #181818;
-    padding: 14px 24px;
+    padding: 12px 20px;
     border-radius: 40px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-family: 'Space Mono', monospace;
-    letter-spacing: 0.5px;
     border: 1px solid #252525;
     color: #cccccc;
     transition: 0.25s;
@@ -112,61 +115,21 @@ body {
     background: #222222;
     border-color: #444444;
     color: #ffffff;
-    transform: scale(1.02);
-}
-#game {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #111111;
-    border: 1px solid #2a2a2a;
-    border-radius: 20px;
-    padding: 22px 22px 26px;
-    z-index: 100;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.95);
-    min-width: 520px;
-    display: none;
 }
 
-#game-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 14px;
-    margin-bottom: 16px;
-    border-bottom: 1px solid #1f1f1f;
-    font-size: 0.95rem;
-    letter-spacing: 0.5px;
-    color: #aaaaaa;
-}
-
-#game-header button {
-    background: none;
-    border: none;
-    color: #666666;
-    font-size: 1.4rem;
-    cursor: pointer;
-    transition: 0.2s;
-    line-height: 1;
-}
-
-#game-header button:hover {
-    color: #ffffff;
-}
-
-#pong {
-    background: #0a0a0a;
-    border-radius: 12px;
-    display: block;
-    width: 100%;
-    height: auto;
+/* App Content */
+#app-content {
+    background: #0f0f0f;
+    border-radius: 16px;
+    padding: 24px;
+    min-height: 200px;
     border: 1px solid #1a1a1a;
 }
+
+/* Responsive */
 @media (max-width: 600px) {
     #os {
-        padding: 20px 16px;
-        border-radius: 18px;
+        padding: 18px 14px;
     }
 
     #topbar {
@@ -184,7 +147,6 @@ body {
 
     #search-container button {
         width: 100%;
-        padding: 14px;
     }
 
     #apps {
@@ -192,17 +154,7 @@ body {
     }
 
     .app {
-        padding: 12px 20px;
-        font-size: 0.8rem;
-    }
-
-    #game {
-        min-width: unset;
-        width: 92%;
-        padding: 16px;
-    }
-
-    #game-header {
+        padding: 10px 16px;
         font-size: 0.8rem;
     }
 }
