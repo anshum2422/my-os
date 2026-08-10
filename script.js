@@ -1,4 +1,3 @@
-
 function updateClock() {
     const now = new Date();
     const timeElement = document.getElementById('time');
@@ -8,8 +7,6 @@ function updateClock() {
 }
 setInterval(updateClock, 1000);
 updateClock();
-
-
 
 function updateWeather() {
     const temp = Math.floor(Math.random() * 15) + 15;
@@ -21,7 +18,6 @@ function updateWeather() {
     }
 }
 updateWeather();
-
 
 function search() {
     const searchInput = document.getElementById('search');
@@ -36,8 +32,6 @@ function search() {
 document.getElementById('search').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') search();
 });
-
-
 
 let windowId = 0;
 const windows = {};
@@ -169,7 +163,6 @@ function bringToFront(id) {
     }
 }
 
-
 let dragData = null;
 
 document.addEventListener('mousedown', function(e) {
@@ -205,8 +198,6 @@ document.addEventListener('mouseup', function() {
         dragData = null;
     }
 });
-
-
 
 function saveNote(id) {
     const note = document.getElementById('notes-text-' + id);
@@ -245,7 +236,6 @@ function deleteNote(index) {
     });
 }
 
-
 function calcPress(id, value) {
     const input = document.getElementById('calc-input-' + id);
     if (input) input.value += value;
@@ -266,8 +256,6 @@ function calcResult(id) {
         }
     }
 }
-
-
 
 let timerIntervals = {};
 
@@ -331,7 +319,6 @@ function showQuote() {
 
 showQuote();
 
-
 function addTodo(id) {
     const input = document.getElementById('todo-input-' + id);
     if (input && input.value.trim()) {
@@ -368,7 +355,6 @@ function deleteTodo(index) {
         if (windows[id].type === 'todo') loadTodos(id);
     });
 }
-
 
 let pongAnimations = {};
 
