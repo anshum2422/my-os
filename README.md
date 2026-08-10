@@ -1,24 +1,25 @@
-OS – Stoic
+# My OS
 
-I built a simple operating system-like interface in the browser. It has a clock, weather, search bar, and a few apps that open in draggable windows. I wanted something clean and high-contrast, so I went with a black-and-white Nothing-style design.
+I built a simple OS-like interface in the browser. It has a clock, weather, search, and apps that open in draggable windows.
 
-## What's Inside
+## Features
 
-- **Clock** – shows live time
-- **Weather** – random temp with icons (just for fun)
-- **Search** – opens Google
-- **Notes** – saves to localStorage
-- **Calculator** – basic math
-- **Timer** – countdown with start/stop/reset
-- **Todo** – saves tasks to localStorage
-- **Ping Pong** – 2-player game (W/S and arrow keys)
-- **About** – project info
-
-All apps open in separate windows that you can drag around.
+- Clock (live)
+- Weather (simulated)
+- Search (Google)
+- Notes (saves to localStorage)
+- Calculator
+- Timer
+- Todo (saves to localStorage)
+- Ping Pong (2-player)
+- Random quote
+- Draggable windows
 
 ## How I Built It
 
-I used HTML, CSS, and JavaScript. No frameworks. The design is inspired by Nothing OS — clean, monochrome, and minimal. I added draggable windows and localStorage for notes and todos as my own features.
+I used HTML, CSS, and JavaScript. No frameworks. The design is inspired by Nothing OS — black and white, clean, and minimal.
+
+I added draggable windows and localStorage for notes and todos as my own features.
 
 ## What I Learned
 
