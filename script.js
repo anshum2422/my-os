@@ -1,5 +1,4 @@
 
-
 function updateClock() {
     const now = new Date();
     const timeElement = document.getElementById('time');
@@ -9,6 +8,7 @@ function updateClock() {
 }
 setInterval(updateClock, 1000);
 updateClock();
+
 
 
 function updateWeather() {
@@ -245,9 +245,6 @@ function deleteNote(index) {
     });
 }
 
-// ============================================
-// CALCULATOR
-// ============================================
 
 function calcPress(id, value) {
     const input = document.getElementById('calc-input-' + id);
@@ -269,6 +266,7 @@ function calcResult(id) {
         }
     }
 }
+
 
 
 let timerIntervals = {};
@@ -312,7 +310,6 @@ function resetTimer(id) {
 }
 
 
-
 function addTodo(id) {
     const input = document.getElementById('todo-input-' + id);
     if (input && input.value.trim()) {
@@ -349,7 +346,6 @@ function deleteTodo(index) {
         if (windows[id].type === 'todo') loadTodos(id);
     });
 }
-
 
 
 let pongAnimations = {};
@@ -467,26 +463,6 @@ function initPong(id) {
         }
 
         pongAnimations[id] = requestAnimationFrame(draw);
-
-        function showquote() {
-            const quotes = [
-                "The best way to predict the future is to invent it. - Alan Kay",
-                "Life is 10% what happens to us and 90% how we react to it. - Charles R. Swindoll",
-                "Code is like humor. When you have to explain it, it’s bad. - Cory House",
-                "Simplicity is the soul of efficiency. - Austin Freeman",
-                "In order to be irreplaceable, one must always be different. - Coco Chanel",
-                "The only way to do great work is to love what you do. - Steve Jobs",
-                "The best revenge is massive success. - Frank Sinatra",
-                "The only limit to our realization of tomorrow will be our doubts of today. - Franklin D. Roosevelt",
-                "The best way to get started is to quit talking and begin doing. - Walt Disney",
-            ]
-            const q =quotes[Math.floor(Math.random()*quotes.length)];
-            const el = document.getElementbyID('quote');
-            if (el) el.textContent ='💬 ' + q;
-
-        } 
-        showquote();
-        
     }
 
     if (pongAnimations[id]) cancelAnimationFrame(pongAnimations[id]);
