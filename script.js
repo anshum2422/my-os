@@ -1,6 +1,4 @@
-// ============================================
-// CLOCK
-// ============================================
+
 
 function updateClock() {
     const now = new Date();
@@ -12,9 +10,6 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-// ============================================
-// WEATHER
-// ============================================
 
 function updateWeather() {
     const temp = Math.floor(Math.random() * 15) + 15;
@@ -27,9 +22,6 @@ function updateWeather() {
 }
 updateWeather();
 
-// ============================================
-// SEARCH
-// ============================================
 
 function search() {
     const searchInput = document.getElementById('search');
@@ -45,9 +37,7 @@ document.getElementById('search').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') search();
 });
 
-// ============================================
-// WINDOW SYSTEM
-// ============================================
+
 
 let windowId = 0;
 const windows = {};
@@ -179,9 +169,6 @@ function bringToFront(id) {
     }
 }
 
-// ============================================
-// DRAGGING
-// ============================================
 
 let dragData = null;
 
@@ -219,9 +206,7 @@ document.addEventListener('mouseup', function() {
     }
 });
 
-// ============================================
-// NOTES
-// ============================================
+
 
 function saveNote(id) {
     const note = document.getElementById('notes-text-' + id);
@@ -285,9 +270,6 @@ function calcResult(id) {
     }
 }
 
-// ============================================
-// TIMER
-// ============================================
 
 let timerIntervals = {};
 
@@ -329,9 +311,7 @@ function resetTimer(id) {
     if (secs) secs.value = '';
 }
 
-// ============================================
-// TODO
-// ============================================
+
 
 function addTodo(id) {
     const input = document.getElementById('todo-input-' + id);
@@ -370,9 +350,7 @@ function deleteTodo(index) {
     });
 }
 
-// ============================================
-// PING PONG
-// ============================================
+
 
 let pongAnimations = {};
 
