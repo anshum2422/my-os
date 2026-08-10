@@ -9,34 +9,32 @@
 
     <div id="os">
 
-        <!-- Top Bar -->
         <div id="topbar">
             <div id="time">00:00:00</div>
             <div id="weather">☀️ 22°C</div>
         </div>
 
-        <!-- Search -->
         <div id="search-container">
             <input type="text" id="search" placeholder="Search...">
             <button onclick="search()">Go</button>
         </div>
 
-        <!-- Apps -->
         <div id="apps">
-            <div class="app" onclick="openApp('notes')">📝 Notes</div>
-            <div class="app" onclick="openApp('calc')">🧮 Calculator</div>
-            <div class="app" onclick="openApp('timer')">⏱️ Timer</div>
-            <div class="app" onclick="openApp('todo')">✅ To-do List</div>
-            <div class="app" onclick="openApp('pong')">🏓 Ping-Pong</div>
-            <div class="app" onclick="openApp('about')">ℹ️ About</div>
+            <div class="app" onclick="openWindow('notes')">📝 Notes</div>
+            <div class="app" onclick="openWindow('calc')">🧮 Calc</div>
+            <div class="app" onclick="openWindow('timer')">⏱️ Timer</div>
+            <div class="app" onclick="openWindow('todo')">✅ Todo</div>
+            <div class="app" onclick="openWindow('pong')">🏓 Pong</div>
+            <div class="app" onclick="openWindow('about')">ℹ️ About</div>
         </div>
-
-        <!-- App Content Area -->
         <div id="app-content">
-            <p style="color:#555; text-align:center; padding:40px 0;">Click an app to open it</p>
+            <p style="color:#444; text-align:center; padding:30px 0; font-size:0.9rem;">Click an app to open it</p>
         </div>
+        <div id="quote" style="color: #555; text-align:center; margin-bottom:20px; font-size:0.9rem;">Loading Quote...</div>    
 
     </div>
+
+    <div id="window-container"></div>
 
     <script src="script.js"></script>
 
