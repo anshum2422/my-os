@@ -10,7 +10,7 @@ updateClock();
 
 function getRealWeather() {
     const apiKey = '46e91267defd39ca277a63044565bcd6';
-    const city = 'Dehradun';
+    const city = 'Islamabad';
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
     fetch(url)
