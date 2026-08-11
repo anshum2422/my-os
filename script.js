@@ -1,4 +1,3 @@
-
 function updateClock() {
     const now = new Date();
     const timeElement = document.getElementById('time');
@@ -9,18 +8,23 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-function updateWeather() {
-    const temp = Math.floor(Math.random() * 15) + 15;
-    const icons = ['☀️', '⛅', '🌤️', '🌙'];
-    const icon = icons[Math.floor(Math.random() * icons.length)];
-    const weatherElement = document.getElementById('weather');
-    if (weatherElement) {
-        weatherElement.textContent = icon + ' ' + temp + '°C';
-    }
+function getRealWeather() {
+    const apiKey = 'YOUR_API_KEY_HERE';
+    const city = 'London';
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const temp = Math.round(data.main.temp);
+            const description = data.weather[0].description;
+            document.getElementById('weather').textContent = `${temp}°C ${description}`;
+        })
+        .catch(() => {
+            document.getElementById('weather').textContent = 'Weather unavailable';
+        });
 }
-updateWeather();
-
-
+getRealWeather();
 
 function search() {
     const searchInput = document.getElementById('search');
@@ -35,7 +39,6 @@ function search() {
 document.getElementById('search').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') search();
 });
-
 
 let windowId = 0;
 const windows = {};
@@ -112,6 +115,39 @@ function openWindow(type) {
             <p style="color:#888; font-size:0.8rem; margin-bottom:10px;">Player 1: W/S &nbsp;|&nbsp; Player 2: Arrow Keys</p>
             <canvas id="pong-${id}" width="560" height="320"></canvas>
         `;
+    } else if (type === 'music') {
+        title = '🎵 Music Player';
+        bodyHTML = `
+            <div style="text-align:center; padding:10px;">
+                <input id="music-url" type="text" placeholder="Paste audio URL..." style="width:100%; padding:8px; margin-bottom:10px; background:#0a0a0a; color:#fff; border:1px solid #333; border-radius:4px;">
+                <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+                    <button onclick="playMusic()" style="padding:8px 16px; background:#222; color:#fff; border:1px solid #333; border-radius:4px; cursor:pointer;">▶ Play</button>
+                    <button onclick="pauseMusic()" style="padding:8px 16px; background:#222; color:#fff; border:1px solid #333; border-radius:4px; cursor:pointer;">⏸ Pause</button>
+                    <button onclick="stopMusic()" style="padding:8px 16px; background:#222; color:#fff; border:1px solid #333; border-radius:4px; cursor:pointer;">⏹ Stop</button>
+                </div>
+                <div id="music-status" style="margin-top:10px; color:#888;">Enter a URL and press Play</div>
+            </div>
+        `;
+    } else if (type === 'settings') {
+        title = '⚙️ Settings';
+        bodyHTML = `
+            <div style="padding:10px;">
+                <div style="margin-bottom:15px;">
+                    <label style="color:#888;">Theme</label><br>
+                    <button onclick="setTheme('dark')" style="padding:6px 12px; margin:4px; background:#222; color:#fff; border:1px solid #333; border-radius:4px; cursor:pointer;">Dark</button>
+                    <button onclick="setTheme('light')" style="padding:6px 12px; margin:4px; background:#eee; color:#000; border:1px solid #333; border-radius:4px; cursor:pointer;">Light</button>
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="color:#888;">Font Size</label><br>
+                    <button onclick="setFontSize('small')" style="padding:6px 12px; margin:4px; background:#222; color:#fff; border:1px solid #333; border-radius:4px; cursor:pointer;">Small</button>
+                    <button onclick="setFontSize('medium')" style="padding:6px 12px; margin:4px; background:#222; color:#fff; border:1px solid #333; border-radius:4px; cursor:pointer;">Medium</button>
+                    <button onclick="setFontSize('large')" style="padding:6px 12px; margin:4px; background:#222; color:#fff; border:1px solid #333; border-radius:4px; cursor:pointer;">Large</button>
+                </div>
+                <div style="margin-top:15px; border-top:1px solid #222; padding-top:15px;">
+                    <p style="color:#444; font-size:0.8rem;">Settings saved locally</p>
+                </div>
+            </div>
+        `;
     } else if (type === 'about') {
         title = 'ℹ️ About';
         bodyHTML = `
@@ -120,50 +156,19 @@ function openWindow(type) {
                 Built by @anshum_2422<br><br>
                 Features:<br>
                 • Live clock<br>
-                • Simulated weather<br>
+                • Real weather API<br>
                 • Google search<br>
                 • Notes with save<br>
                 • Calculator<br>
                 • Timer<br>
                 • Todo list<br>
-                • Ping Pong<br><br>
+                • Ping Pong<br>
+                • Music Player<br>
+                • Settings (theme + font)<br><br>
                 Made with ☕ and 🚀
             </p>
         `;
-    }  else if (type === 'music') {
-    title = '🎵 Music Player';
-    bodyHTML = `
-        <div style="text-align:center; padding:10px;">
-            <input id="music-url" type="text" placeholder="Paste audio URL..." style="width:100%; padding:8px; margin-bottom:10px; background:#0a0a0a; color:#fff; border:1px solid #333; border-radius:4px;">
-            <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
-                <button onclick="playMusic()" style="padding:8px 16px; background:#222; color:#fff; border:1px solid #333; border-radius:4px; cursor:pointer;">▶ Play</button>
-                <button onclick="pauseMusic()" style="padding:8px 16px; background:#222; color:#fff; border:1px solid #333; border-radius:4px; cursor:pointer;">⏸ Pause</button>
-                <button onclick="stopMusic()" style="padding:8px 16px; background:#222; color:#fff; border:1px solid #333; border-radius:4px; cursor:pointer;">⏹ Stop</button>
-            </div>
-            <div id="music-status" style="margin-top:10px; color:#888;">Enter a URL and press Play</div>
-        </div>
-    `;
-    } else if (type === 'settings') {
-    title = '⚙️ Settings';
-    bodyHTML = `
-        <div style="padding:10px;">
-            <div style="margin-bottom:15px;">
-                <label style="color:#888;">Theme</label><br>
-                <button onclick="setTheme('dark')" style="padding:6px 12px; margin:4px; background:#222; color:#fff; border:1px solid #333; border-radius:4px;">Dark</button>
-                <button onclick="setTheme('light')" style="padding:6px 12px; margin:4px; background:#eee; color:#000; border:1px solid #333; border-radius:4px;">Light</button>
-            </div>
-            <div style="margin-bottom:15px;">
-                <label style="color:#888;">Font Size</label><br>
-                <button onclick="setFontSize('small')" style="padding:6px 12px; margin:4px; background:#222; color:#fff; border:1px solid #333; border-radius:4px;">Small</button>
-                <button onclick="setFontSize('medium')" style="padding:6px 12px; margin:4px; background:#222; color:#fff; border:1px solid #333; border-radius:4px;">Medium</button>
-                <button onclick="setFontSize('large')" style="padding:6px 12px; margin:4px; background:#222; color:#fff; border:1px solid #333; border-radius:4px;">Large</button>
-            </div>
-            <div style="margin-top:15px; border-top:1px solid #222; padding-top:15px;">
-                <p style="color:#444; font-size:0.8rem;">Settings saved locally</p>
-            </div>
-        </div>
-    `;
-}
+    }
 
     win.innerHTML = `
         <div class="window-header" data-window="${id}">
@@ -171,6 +176,7 @@ function openWindow(type) {
             <button class="window-close" onclick="closeWindow('${id}')">✕</button>
         </div>
         <div class="window-body">${bodyHTML}</div>
+        <div class="resize-handle"></div>
     `;
 
     container.appendChild(win);
@@ -236,6 +242,43 @@ document.addEventListener('mouseup', function() {
     }
 });
 
+let resizeData = null;
+
+document.addEventListener('mousedown', function(e) {
+    const handle = e.target.closest('.resize-handle');
+    if (handle) {
+        const win = handle.closest('.window');
+        if (win) {
+            resizeData = {
+                element: win,
+                startX: e.clientX,
+                startY: e.clientY,
+                startWidth: win.offsetWidth,
+                startHeight: win.offsetHeight
+            };
+            e.preventDefault();
+        }
+    }
+});
+
+document.addEventListener('mousemove', function(e) {
+    if (resizeData) {
+        const dx = e.clientX - resizeData.startX;
+        const dy = e.clientY - resizeData.startY;
+        const newWidth = Math.max(300, resizeData.startWidth + dx);
+        const newHeight = Math.max(200, resizeData.startHeight + dy);
+        resizeData.element.style.width = newWidth + 'px';
+        resizeData.element.style.height = newHeight + 'px';
+        resizeData.element.style.minWidth = '300px';
+        resizeData.element.style.minHeight = '200px';
+    }
+});
+
+document.addEventListener('mouseup', function() {
+    if (resizeData) {
+        resizeData = null;
+    }
+});
 
 function saveNote(id) {
     const note = document.getElementById('notes-text-' + id);
@@ -274,8 +317,6 @@ function deleteNote(index) {
     });
 }
 
-
-
 function calcPress(id, value) {
     const input = document.getElementById('calc-input-' + id);
     if (input) input.value += value;
@@ -296,7 +337,6 @@ function calcResult(id) {
         }
     }
 }
-
 
 let timerIntervals = {};
 
@@ -338,6 +378,170 @@ function resetTimer(id) {
     if (secs) secs.value = '';
 }
 
+let audioPlayer = null;
+
+function playMusic() {
+    const urlInput = document.getElementById('music-url');
+    const status = document.getElementById('music-status');
+
+    if (!status) {
+        console.error('music-status element not found');
+        return;
+    }
+
+    if (!urlInput || !urlInput.value.trim()) {
+        status.textContent = '❌ Please enter a URL';
+        return;
+    }
+
+    const url = urlInput.value.trim();
+
+    if (!url.startsWith('https://') && !url.startsWith('http://')) {
+        status.textContent = '❌ Invalid URL (use https://)';
+        return;
+    }
+
+    try {
+        if (audioPlayer) {
+            audioPlayer.pause();
+            audioPlayer = null;
+        }
+
+        audioPlayer = new Audio(url);
+        audioPlayer.play()
+            .then(() => {
+                status.textContent = '🎵 Playing...';
+            })
+            .catch((err) => {
+                status.textContent = '❌ Cannot play this URL';
+                console.error('Audio playback error:', err);
+            });
+
+        audioPlayer.onerror = function() {
+            status.textContent = '❌ Error loading audio';
+        };
+
+        audioPlayer.onended = function() {
+            status.textContent = '⏹ Track ended';
+        };
+
+    } catch (err) {
+        status.textContent = '❌ Error: ' + err.message;
+        console.error('Audio error:', err);
+    }
+}
+
+function pauseMusic() {
+    const status = document.getElementById('music-status');
+    if (audioPlayer && status) {
+        audioPlayer.pause();
+        status.textContent = '⏸ Paused';
+    }
+}
+
+function stopMusic() {
+    const status = document.getElementById('music-status');
+    if (audioPlayer && status) {
+        audioPlayer.pause();
+        audioPlayer.currentTime = 0;
+        status.textContent = '⏹ Stopped';
+    }
+}
+
+function setTheme(theme) {
+    const os = document.getElementById('os');
+    if (theme === 'light') {
+        os.style.background = '#ffffff';
+        os.style.color = '#000000';
+        document.querySelectorAll('.window').forEach(w => {
+            w.style.background = '#ffffff';
+            w.style.color = '#000000';
+        });
+        document.querySelectorAll('.window-header').forEach(h => {
+            h.style.background = '#eeeeee';
+            h.style.borderBottom = '1px solid #dddddd';
+        });
+        document.querySelectorAll('.window-title').forEach(t => {
+            t.style.color = '#000000';
+        });
+        document.querySelectorAll('.window-body button').forEach(b => {
+            b.style.color = '#000000';
+            b.style.border = '1px solid #cccccc';
+        });
+        document.querySelectorAll('.window-body input, .window-body textarea').forEach(i => {
+            i.style.background = '#f5f5f5';
+            i.style.color = '#000000';
+            i.style.border = '1px solid #cccccc';
+        });
+    } else {
+        os.style.background = '#0a0a0a';
+        os.style.color = '#ffffff';
+        document.querySelectorAll('.window').forEach(w => {
+            w.style.background = '#0a0a0a';
+            w.style.color = '#ffffff';
+        });
+        document.querySelectorAll('.window-header').forEach(h => {
+            h.style.background = '#111111';
+            h.style.borderBottom = '1px solid #222222';
+        });
+        document.querySelectorAll('.window-title').forEach(t => {
+            t.style.color = '#ffffff';
+        });
+        document.querySelectorAll('.window-body button').forEach(b => {
+            b.style.color = '#ffffff';
+            b.style.border = '1px solid #333333';
+        });
+        document.querySelectorAll('.window-body input, .window-body textarea').forEach(i => {
+            i.style.background = '#000000';
+            i.style.color = '#ffffff';
+            i.style.border = '1px solid #2a2a2a';
+        });
+    }
+    localStorage.setItem('os-theme', theme);
+}
+
+function setFontSize(size) {
+    const os = document.getElementById('os');
+    if (size === 'small') {
+        os.style.fontSize = '12px';
+    } else if (size === 'large') {
+        os.style.fontSize = '20px';
+    } else {
+        os.style.fontSize = '16px';
+    }
+    localStorage.setItem('os-fontsize', size);
+}
+
+function loadSettings() {
+    const theme = localStorage.getItem('os-theme');
+    const fontSize = localStorage.getItem('os-fontsize');
+    if (theme) setTheme(theme);
+    if (fontSize) setFontSize(fontSize);
+}
+
+loadSettings();
+
+function showQuote() {
+    const quotes = [
+        "Code is poetry.",
+        "Keep building.",
+        "Small steps count.",
+        "You got this.",
+        "Progress over perfection.",
+        "Make it work, then make it better.",
+        "Every expert was once a beginner.",
+        "Done is better than perfect.",
+        "The best time to start was yesterday. The next best is now.",
+        "Fall seven times, stand up eight."
+    ];
+    const random = Math.floor(Math.random() * quotes.length);
+    const quoteEl = document.getElementById('quote');
+    if (quoteEl) {
+        quoteEl.textContent = '💬 ' + quotes[random];
+    }
+}
+
+showQuote();
 
 function addTodo(id) {
     const input = document.getElementById('todo-input-' + id);
@@ -375,7 +579,6 @@ function deleteTodo(index) {
         if (windows[id].type === 'todo') loadTodos(id);
     });
 }
-
 
 let pongAnimations = {};
 
@@ -490,109 +693,9 @@ function initPong(id) {
             ballSpeedX = 4 * (Math.random() > 0.5 ? 1 : -1);
             ballSpeedY = 3 * (Math.random() > 0.5 ? 1 : -1);
         }
-
         pongAnimations[id] = requestAnimationFrame(draw);
     }
-}
 
-function showquote() {
-    const quotes = [
-        "The best way to predict the future is to invent it. - Alan Kay",
-        "Life is 10% what happens to us and 90% how we react to it. - Charles R. Swindoll",
-        "Code is like humor. When you have to explain it, it’s bad. - Cory House",
-        "Simplicity is the soul of efficiency. - Austin Freeman",
-        "In order to be irreplaceable, one must always be different. - Coco Chanel",
-        "The only way to do great work is to love what you do. - Steve Jobs",
-        "The best revenge is massive success. - Frank Sinatra",
-        "The only limit to our realization of tomorrow will be our doubts of today. - Franklin D. Roosevelt",
-        "The best way to get started is to quit talking and begin doing. - Walt Disney",
-    ];
-    const q = quotes[Math.floor(Math.random() * quotes.length)];
-    const el = document.getElementById('quote');
-    if (el) el.textContent = '💬 ' + q;
+    if (pongAnimations[id]) cancelAnimationFrame(pongAnimations[id]);
+    draw();
 }
-
-function getRealWeather() {
-    const apiKey = '46e91267defd39ca277a63044565bcd6';
-    const city = 'Haridwar';
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            const temp = data.main?.temp;
-            const description = data.weather?.[0]?.description;
-            const weatherEl = document.getElementById('weather');
-            if (weatherEl) {
-                weatherEl.innerHTML = `${temp}°C ${description}`;
-            }
-        })
-        .catch(() => {
-            const weatherEl = document.getElementById('weather');
-            if (weatherEl) {
-                weatherEl.textContent = 'Weather unavailable';
-            }
-        });
-}
-let audioPlayer =null;
-function playMusic () {
-    const urlInput = document.getElementById('music-url');
-    const status = document.getElementById('music-status');
-    if (urlInput && urlInput.value.trim()) {
-        if (audioPlayer) {
-            audioPlayer.pause();
-        }
-        audioPlayer = new Audio(urlInput.value.trim());
-        audioPlayer.play();
-        status.textContent = '🎵 Playing...';
-    }    
-}
-function pauseMusic() {
-    if (audioPlayer) {
-        audioPlayer.pause();
-        document.getElementById('music-status').textContent = '⏸ Paused';
-    }
-}
-function stopMusic() {
-     if (audioPlayer) {
-        audioPlayer.pause();
-        audioPlayer.currentTime = 0;
-        document.getElementById('music-status').textContent = '⏹ Stopped';
-    }
-}
-function setTheme(theme) {
-    const os = document.getElementById('os');
-    if (theme === 'light') {
-        os.style.background = '#ffffff';
-        os.style.color = '#000000';
-    } else {
-        os.style.background = '#0a0a0a';
-        os.style.color = '#ffffff';
-    }
-    localStorage.setItem('os-theme', theme);
-}
-
-function setFontSize(size) {
-    const os = document.getElementById('os');
-    if (size === 'small') {
-        os.style.fontSize = '12px';
-    } else if (size === 'large') {
-        os.style.fontSize = '20px';
-    } else {
-        os.style.fontSize = '16px';
-    }
-    localStorage.setItem('os-fontsize', size);
-}
-
-function loadSettings() {
-    const theme = localStorage.getItem('os-theme');
-    const fontSize = localStorage.getItem('os-fontsize');
-    if (theme) setTheme(theme);
-    if (fontSize) setFontSize(fontSize);
-}
-
-// Call this when the page loads
-loadSettings();
-
-showquote();
-getRealWeather();
