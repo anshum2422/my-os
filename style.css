@@ -1,3 +1,7 @@
+/* ============================================
+   NOTHING OS STYLE
+   Clean. High Contrast. Sharp.
+   ============================================ */
 
 * {
     margin: 0;
@@ -26,6 +30,7 @@ body {
     box-shadow: 0 20px 60px rgba(0,0,0,0.95);
 }
 
+/* Top Bar */
 #topbar {
     display: flex;
     justify-content: space-between;
@@ -45,7 +50,7 @@ body {
     color: #aaaaaa;
 }
 
-
+/* Search */
 #search-container {
     display: flex;
     gap: 10px;
@@ -90,7 +95,7 @@ body {
     color: #000000;
 }
 
-
+/* Apps */
 #apps {
     display: flex;
     gap: 8px;
@@ -116,7 +121,7 @@ body {
     border-color: #ffffff;
 }
 
-
+/* App Content */
 #app-content {
     background: #000000;
     border-radius: 8px;
@@ -129,6 +134,9 @@ body {
     color: #444444;
 }
 
+/* ============================================
+   WINDOWS
+   ============================================ */
 
 #window-container {
     position: fixed;
@@ -279,7 +287,7 @@ body {
     color: #ff4444;
 }
 
-
+/* Ping Pong */
 #pong {
     background: #000000;
     border-radius: 6px;
@@ -289,7 +297,7 @@ body {
     border: 1px solid #222222;
 }
 
-
+/* Responsive */
 @media (max-width: 600px) {
     #os {
         padding: 18px 14px;

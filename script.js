@@ -1,3 +1,4 @@
+
 function updateClock() {
     const now = new Date();
     const timeElement = document.getElementById('time');
@@ -19,6 +20,8 @@ function updateWeather() {
 }
 updateWeather();
 
+
+
 function search() {
     const searchInput = document.getElementById('search');
     if (searchInput) {
@@ -32,6 +35,7 @@ function search() {
 document.getElementById('search').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') search();
 });
+
 
 let windowId = 0;
 const windows = {};
@@ -126,7 +130,40 @@ function openWindow(type) {
                 Made with ☕ and 🚀
             </p>
         `;
-    }
+    }  else if (type === 'music') {
+    title = '🎵 Music Player';
+    bodyHTML = `
+        <div style="text-align:center; padding:10px;">
+            <input id="music-url" type="text" placeholder="Paste audio URL..." style="width:100%; padding:8px; margin-bottom:10px; background:#0a0a0a; color:#fff; border:1px solid #333; border-radius:4px;">
+            <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+                <button onclick="playMusic()" style="padding:8px 16px; background:#222; color:#fff; border:1px solid #333; border-radius:4px; cursor:pointer;">▶ Play</button>
+                <button onclick="pauseMusic()" style="padding:8px 16px; background:#222; color:#fff; border:1px solid #333; border-radius:4px; cursor:pointer;">⏸ Pause</button>
+                <button onclick="stopMusic()" style="padding:8px 16px; background:#222; color:#fff; border:1px solid #333; border-radius:4px; cursor:pointer;">⏹ Stop</button>
+            </div>
+            <div id="music-status" style="margin-top:10px; color:#888;">Enter a URL and press Play</div>
+        </div>
+    `;
+    } else if (type === 'settings') {
+    title = '⚙️ Settings';
+    bodyHTML = `
+        <div style="padding:10px;">
+            <div style="margin-bottom:15px;">
+                <label style="color:#888;">Theme</label><br>
+                <button onclick="setTheme('dark')" style="padding:6px 12px; margin:4px; background:#222; color:#fff; border:1px solid #333; border-radius:4px;">Dark</button>
+                <button onclick="setTheme('light')" style="padding:6px 12px; margin:4px; background:#eee; color:#000; border:1px solid #333; border-radius:4px;">Light</button>
+            </div>
+            <div style="margin-bottom:15px;">
+                <label style="color:#888;">Font Size</label><br>
+                <button onclick="setFontSize('small')" style="padding:6px 12px; margin:4px; background:#222; color:#fff; border:1px solid #333; border-radius:4px;">Small</button>
+                <button onclick="setFontSize('medium')" style="padding:6px 12px; margin:4px; background:#222; color:#fff; border:1px solid #333; border-radius:4px;">Medium</button>
+                <button onclick="setFontSize('large')" style="padding:6px 12px; margin:4px; background:#222; color:#fff; border:1px solid #333; border-radius:4px;">Large</button>
+            </div>
+            <div style="margin-top:15px; border-top:1px solid #222; padding-top:15px;">
+                <p style="color:#444; font-size:0.8rem;">Settings saved locally</p>
+            </div>
+        </div>
+    `;
+}
 
     win.innerHTML = `
         <div class="window-header" data-window="${id}">
@@ -199,6 +236,7 @@ document.addEventListener('mouseup', function() {
     }
 });
 
+
 function saveNote(id) {
     const note = document.getElementById('notes-text-' + id);
     if (note && note.value.trim()) {
@@ -236,6 +274,8 @@ function deleteNote(index) {
     });
 }
 
+
+
 function calcPress(id, value) {
     const input = document.getElementById('calc-input-' + id);
     if (input) input.value += value;
@@ -256,6 +296,7 @@ function calcResult(id) {
         }
     }
 }
+
 
 let timerIntervals = {};
 
@@ -297,27 +338,6 @@ function resetTimer(id) {
     if (secs) secs.value = '';
 }
 
-function showQuote() {
-    const quotes = [
-        "Code is poetry.",
-        "Keep building.",
-        "Small steps count.",
-        "You got this.",
-        "Progress over perfection.",
-        "Make it work, then make it better.",
-        "Every expert was once a beginner.",
-        "Done is better than perfect.",
-        "The best time to start was yesterday. The next best is now.",
-        "Fall seven times, stand up eight."
-    ];
-    const random = Math.floor(Math.random() * quotes.length);
-    const quoteEl = document.getElementById('quote');
-    if (quoteEl) {
-        quoteEl.textContent = '💬 ' + quotes[random];
-    }
-}
-
-showQuote();
 
 function addTodo(id) {
     const input = document.getElementById('todo-input-' + id);
@@ -355,6 +375,7 @@ function deleteTodo(index) {
         if (windows[id].type === 'todo') loadTodos(id);
     });
 }
+
 
 let pongAnimations = {};
 
@@ -469,9 +490,109 @@ function initPong(id) {
             ballSpeedX = 4 * (Math.random() > 0.5 ? 1 : -1);
             ballSpeedY = 3 * (Math.random() > 0.5 ? 1 : -1);
         }
+
         pongAnimations[id] = requestAnimationFrame(draw);
     }
-
-    if (pongAnimations[id]) cancelAnimationFrame(pongAnimations[id]);
-    draw();
 }
+
+function showquote() {
+    const quotes = [
+        "The best way to predict the future is to invent it. - Alan Kay",
+        "Life is 10% what happens to us and 90% how we react to it. - Charles R. Swindoll",
+        "Code is like humor. When you have to explain it, it’s bad. - Cory House",
+        "Simplicity is the soul of efficiency. - Austin Freeman",
+        "In order to be irreplaceable, one must always be different. - Coco Chanel",
+        "The only way to do great work is to love what you do. - Steve Jobs",
+        "The best revenge is massive success. - Frank Sinatra",
+        "The only limit to our realization of tomorrow will be our doubts of today. - Franklin D. Roosevelt",
+        "The best way to get started is to quit talking and begin doing. - Walt Disney",
+    ];
+    const q = quotes[Math.floor(Math.random() * quotes.length)];
+    const el = document.getElementById('quote');
+    if (el) el.textContent = '💬 ' + q;
+}
+
+function getRealWeather() {
+    const apiKey = '46e91267defd39ca277a63044565bcd6';
+    const city = 'Haridwar';
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const temp = data.main?.temp;
+            const description = data.weather?.[0]?.description;
+            const weatherEl = document.getElementById('weather');
+            if (weatherEl) {
+                weatherEl.innerHTML = `${temp}°C ${description}`;
+            }
+        })
+        .catch(() => {
+            const weatherEl = document.getElementById('weather');
+            if (weatherEl) {
+                weatherEl.textContent = 'Weather unavailable';
+            }
+        });
+}
+let audioPlayer =null;
+function playMusic () {
+    const urlInput = document.getElementById('music-url');
+    const status = document.getElementById('music-status');
+    if (urlInput && urlInput.value.trim()) {
+        if (audioPlayer) {
+            audioPlayer.pause();
+        }
+        audioPlayer = new Audio(urlInput.value.trim());
+        audioPlayer.play();
+        status.textContent = '🎵 Playing...';
+    }    
+}
+function pauseMusic() {
+    if (audioPlayer) {
+        audioPlayer.pause();
+        document.getElementById('music-status').textContent = '⏸ Paused';
+    }
+}
+function stopMusic() {
+     if (audioPlayer) {
+        audioPlayer.pause();
+        audioPlayer.currentTime = 0;
+        document.getElementById('music-status').textContent = '⏹ Stopped';
+    }
+}
+function setTheme(theme) {
+    const os = document.getElementById('os');
+    if (theme === 'light') {
+        os.style.background = '#ffffff';
+        os.style.color = '#000000';
+    } else {
+        os.style.background = '#0a0a0a';
+        os.style.color = '#ffffff';
+    }
+    localStorage.setItem('os-theme', theme);
+}
+
+function setFontSize(size) {
+    const os = document.getElementById('os');
+    if (size === 'small') {
+        os.style.fontSize = '12px';
+    } else if (size === 'large') {
+        os.style.fontSize = '20px';
+    } else {
+        os.style.fontSize = '16px';
+    }
+    localStorage.setItem('os-fontsize', size);
+}
+
+function loadSettings() {
+    const theme = localStorage.getItem('os-theme');
+    const fontSize = localStorage.getItem('os-fontsize');
+    if (theme) setTheme(theme);
+    if (fontSize) setFontSize(fontSize);
+}
+
+// Call this when the page loads
+loadSettings();
+
+showquote();
+getRealWeather();
