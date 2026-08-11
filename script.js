@@ -9,7 +9,7 @@ setInterval(updateClock, 1000);
 updateClock();
 
 function getRealWeather() {
-    const apiKey = 'b87623ea974f7d9dbdbc4bff0d249480';
+    const apiKey = '46e91267defd39ca277a63044565bcd6';
     const city = 'Dehradun';
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
