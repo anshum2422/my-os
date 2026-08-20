@@ -2,17 +2,19 @@ function updateClock() {
     const now = new Date();
     const timeElement = document.getElementById('time');
     if (timeElement) {
-        timeElement.textContent = now.toLocaleTimeString();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        timeElement.textContent = hours + ':' + minutes + ':' + seconds;
     }
 }
 setInterval(updateClock, 1000);
 updateClock();
 
 function getRealWeather() {
-    const apiKey = '46e91267defd39ca277a63044565bcd6';
-    const city = 'Islamabad';
+    const apiKey = 'YOUR_API_KEY_HERE';
+    const city = 'London';
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-
     fetch(url)
         .then(response => response.json())
         .then(data => {
@@ -35,7 +37,6 @@ function search() {
         }
     }
 }
-
 document.getElementById('search').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') search();
 });
@@ -49,15 +50,12 @@ function openWindow(type) {
     const win = document.createElement('div');
     win.className = 'window';
     win.id = id;
-
     const x = 50 + Math.random() * 200;
     const y = 50 + Math.random() * 150;
     win.style.left = x + 'px';
     win.style.top = y + 'px';
-
     let title = '';
     let bodyHTML = '';
-
     if (type === 'notes') {
         title = '📝 Notes';
         bodyHTML = `
@@ -119,13 +117,20 @@ function openWindow(type) {
         title = '🎵 Music Player';
         bodyHTML = `
             <div style="text-align:center; padding:10px;">
-                <input id="music-url" type="text" placeholder="Paste audio URL..." style="width:100%; padding:8px; margin-bottom:10px; background:#0a0a0a; color:#fff; border:1px solid #333; border-radius:4px;">
-                <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
-                    <button onclick="playMusic()" style="padding:8px 16px; background:#222; color:#fff; border:1px solid #333; border-radius:4px; cursor:pointer;">▶ Play</button>
-                    <button onclick="pauseMusic()" style="padding:8px 16px; background:#222; color:#fff; border:1px solid #333; border-radius:4px; cursor:pointer;">⏸ Pause</button>
-                    <button onclick="stopMusic()" style="padding:8px 16px; background:#222; color:#fff; border:1px solid #333; border-radius:4px; cursor:pointer;">⏹ Stop</button>
+                <p style="color:#888; font-size:0.8rem; margin-bottom:12px;">Paste a Spotify track, album, or playlist URL</p>
+                <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+                    <input id="spotify-url" type="text" placeholder="https://open.spotify.com/track/..." style="flex:1; min-width:150px; padding:8px; background:#0a0a0a; color:#fff; border:1px solid #333; border-radius:4px; font-family:'Space Mono',monospace;">
+                    <button onclick="playSpotifyEmbed()" style="padding:8px 16px; background:#1DB954; color:#fff; border:none; border-radius:4px; cursor:pointer; font-family:'Space Mono',monospace;">▶ Play</button>
                 </div>
-                <div id="music-status" style="margin-top:10px; color:#888;">Enter a URL and press Play</div>
+                <div id="spotify-embed-container" style="margin-top:10px;"></div>
+                <div id="spotify-status" style="color:#888; font-size:0.8rem; margin-top:8px;">Paste a Spotify URL above</div>
+                <hr style="border-color:#222; margin:15px 0;">
+                <p style="color:#555; font-size:0.8rem;">Or use the alternative player:</p>
+                <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">
+                    <button onclick="playYouTube()" style="padding:8px 16px; background:#ff0000; color:#fff; border:none; border-radius:4px; cursor:pointer; font-family:'Space Mono',monospace;">▶ YouTube</button>
+                    <button onclick="playSampleAudio()" style="padding:8px 16px; background:#333; color:#fff; border:1px solid #555; border-radius:4px; cursor:pointer; font-family:'Space Mono',monospace;">🎵 Sample</button>
+                </div>
+                <div id="youtube-container" style="margin-top:10px;"></div>
             </div>
         `;
     } else if (type === 'settings') {
@@ -163,13 +168,12 @@ function openWindow(type) {
                 • Timer<br>
                 • Todo list<br>
                 • Ping Pong<br>
-                • Music Player<br>
+                • Spotify & YouTube player<br>
                 • Settings (theme + font)<br><br>
                 Made with ☕ and 🚀
             </p>
         `;
     }
-
     win.innerHTML = `
         <div class="window-header" data-window="${id}">
             <span class="window-title">${title}</span>
@@ -178,16 +182,12 @@ function openWindow(type) {
         <div class="window-body">${bodyHTML}</div>
         <div class="resize-handle"></div>
     `;
-
     container.appendChild(win);
     win.style.display = 'block';
-
     windows[id] = { type, element: win };
-
     if (type === 'notes') loadNotes(id);
     if (type === 'todo') loadTodos(id);
     if (type === 'pong') setTimeout(() => initPong(id), 100);
-
     win.addEventListener('mousedown', () => bringToFront(id));
 }
 
@@ -207,7 +207,6 @@ function bringToFront(id) {
 }
 
 let dragData = null;
-
 document.addEventListener('mousedown', function(e) {
     const header = e.target.closest('.window-header');
     if (header) {
@@ -224,7 +223,6 @@ document.addEventListener('mousedown', function(e) {
         }
     }
 });
-
 document.addEventListener('mousemove', function(e) {
     if (dragData) {
         const x = e.clientX - dragData.offsetX;
@@ -234,7 +232,6 @@ document.addEventListener('mousemove', function(e) {
         dragData.element.style.transform = 'none';
     }
 });
-
 document.addEventListener('mouseup', function() {
     if (dragData) {
         dragData.element.style.cursor = 'default';
@@ -243,7 +240,6 @@ document.addEventListener('mouseup', function() {
 });
 
 let resizeData = null;
-
 document.addEventListener('mousedown', function(e) {
     const handle = e.target.closest('.resize-handle');
     if (handle) {
@@ -260,7 +256,6 @@ document.addEventListener('mousedown', function(e) {
         }
     }
 });
-
 document.addEventListener('mousemove', function(e) {
     if (resizeData) {
         const dx = e.clientX - resizeData.startX;
@@ -273,7 +268,6 @@ document.addEventListener('mousemove', function(e) {
         resizeData.element.style.minHeight = '200px';
     }
 });
-
 document.addEventListener('mouseup', function() {
     if (resizeData) {
         resizeData = null;
@@ -344,9 +338,7 @@ function startTimer(id) {
     const mins = parseInt(document.getElementById('timer-min-' + id).value) || 0;
     const secs = parseInt(document.getElementById('timer-sec-' + id).value) || 0;
     let total = mins * 60 + secs;
-
     if (timerIntervals[id]) clearInterval(timerIntervals[id]);
-
     timerIntervals[id] = setInterval(() => {
         if (total > 0) {
             total--;
@@ -378,137 +370,320 @@ function resetTimer(id) {
     if (secs) secs.value = '';
 }
 
-let audioPlayer = null;
-
-function playMusic() {
-    const urlInput = document.getElementById('music-url');
-    const status = document.getElementById('music-status');
-
-    if (!status) {
-        console.error('music-status element not found');
-        return;
-    }
-
-    if (!urlInput || !urlInput.value.trim()) {
-        status.textContent = '❌ Please enter a URL';
-        return;
-    }
-
-    const url = urlInput.value.trim();
-
-    if (!url.startsWith('https://') && !url.startsWith('http://')) {
-        status.textContent = '❌ Invalid URL (use https://)';
-        return;
-    }
-
-    try {
-        if (audioPlayer) {
-            audioPlayer.pause();
-            audioPlayer = null;
-        }
-
-        audioPlayer = new Audio(url);
-        audioPlayer.play()
-            .then(() => {
-                status.textContent = '🎵 Playing...';
-            })
-            .catch((err) => {
-                status.textContent = '❌ Cannot play this URL';
-                console.error('Audio playback error:', err);
-            });
-
-        audioPlayer.onerror = function() {
-            status.textContent = '❌ Error loading audio';
-        };
-
-        audioPlayer.onended = function() {
-            status.textContent = '⏹ Track ended';
-        };
-
-    } catch (err) {
-        status.textContent = '❌ Error: ' + err.message;
-        console.error('Audio error:', err);
-    }
-}
-
-function pauseMusic() {
-    const status = document.getElementById('music-status');
-    if (audioPlayer && status) {
-        audioPlayer.pause();
-        status.textContent = '⏸ Paused';
-    }
-}
-
-function stopMusic() {
-    const status = document.getElementById('music-status');
-    if (audioPlayer && status) {
-        audioPlayer.pause();
-        audioPlayer.currentTime = 0;
-        status.textContent = '⏹ Stopped';
-    }
-}
-
 function setTheme(theme) {
     const os = document.getElementById('os');
+    const quote = document.getElementById('quote');
+    const appContent = document.getElementById('app-content');
+
     if (theme === 'light') {
-        os.style.background = '#ffffff';
+        document.body.classList.add('light-mode');
+        
+        os.style.background = '#f5f5f5';
         os.style.color = '#000000';
+        os.style.borderColor = '#cccccc';
+
         document.querySelectorAll('.window').forEach(w => {
             w.style.background = '#ffffff';
             w.style.color = '#000000';
+            w.style.borderColor = '#cccccc';
         });
+
         document.querySelectorAll('.window-header').forEach(h => {
-            h.style.background = '#eeeeee';
-            h.style.borderBottom = '1px solid #dddddd';
+            h.style.background = '#e8e8e8';
+            h.style.borderBottom = '1px solid #cccccc';
+            h.style.color = '#000000';
         });
+
         document.querySelectorAll('.window-title').forEach(t => {
             t.style.color = '#000000';
         });
+
+        document.querySelectorAll('.window-body').forEach(b => {
+            b.style.color = '#000000';
+        });
+
         document.querySelectorAll('.window-body button').forEach(b => {
             b.style.color = '#000000';
             b.style.border = '1px solid #cccccc';
+            b.style.background = '#eeeeee';
         });
+
         document.querySelectorAll('.window-body input, .window-body textarea').forEach(i => {
-            i.style.background = '#f5f5f5';
+            i.style.background = '#ffffff';
             i.style.color = '#000000';
             i.style.border = '1px solid #cccccc';
         });
+
+        document.querySelectorAll('.todo-item, .note-item').forEach(i => {
+            i.style.color = '#000000';
+            i.style.borderBottom = '1px solid #dddddd';
+        });
+
+        document.querySelectorAll('.timer-display').forEach(d => {
+            d.style.color = '#000000';
+        });
+
+        document.querySelectorAll('.window-body label').forEach(l => {
+            l.style.color = '#555555';
+        });
+
+        document.querySelectorAll('.window-body p').forEach(p => {
+            p.style.color = '#555555';
+        });
+
+        document.querySelectorAll('.app').forEach(a => {
+            a.style.color = '#333333';
+            a.style.borderColor = '#cccccc';
+        });
+
+        document.querySelectorAll('#app-content').forEach(c => {
+            c.style.background = '#f0f0f0';
+            c.style.borderColor = '#cccccc';
+            c.style.color = '#000000';
+        });
+
+        document.querySelectorAll('#app-content p').forEach(p => {
+            p.style.color = '#666666';
+        });
+
+        document.querySelectorAll('.window-close').forEach(c => {
+            c.style.color = '#888888';
+        });
+
+        document.querySelectorAll('.window-close:hover').forEach(c => {
+            c.style.color = '#000000';
+        });
+
+        document.querySelectorAll('.resize-handle').forEach(r => {
+            r.style.background = 'rgba(0,0,0,0.05)';
+        });
+
+        document.querySelectorAll('#time').forEach(t => {
+            t.style.color = '#000000';
+            t.style.fontWeight = '900';
+        });
+
+        document.querySelectorAll('#weather').forEach(w => {
+            w.style.color = '#333333';
+        });
+
+        document.querySelectorAll('#search').forEach(s => {
+            s.style.color = '#000000';
+            s.style.background = '#ffffff';
+            s.style.borderColor = '#cccccc';
+        });
+
+        if (quote) quote.style.color = '#888888';
+
+        if (appContent) {
+            appContent.style.background = '#f0f0f0';
+            appContent.style.borderColor = '#cccccc';
+            appContent.style.color = '#000000';
+        }
+
+        document.querySelectorAll('.window-body #spotify-status').forEach(s => {
+            s.style.color = '#555555';
+        });
+
+        document.querySelectorAll('.window-body hr').forEach(h => {
+            h.style.borderColor = '#cccccc';
+        });
+
+        document.querySelectorAll('.window-body p[style*="color:#555"]').forEach(p => {
+            p.style.color = '#666666';
+        });
+
     } else {
+        document.body.classList.remove('light-mode');
+
         os.style.background = '#0a0a0a';
         os.style.color = '#ffffff';
+        os.style.borderColor = '#222222';
+
         document.querySelectorAll('.window').forEach(w => {
             w.style.background = '#0a0a0a';
             w.style.color = '#ffffff';
+            w.style.borderColor = '#333333';
         });
+
         document.querySelectorAll('.window-header').forEach(h => {
             h.style.background = '#111111';
             h.style.borderBottom = '1px solid #222222';
+            h.style.color = '#ffffff';
         });
+
         document.querySelectorAll('.window-title').forEach(t => {
             t.style.color = '#ffffff';
         });
+
+        document.querySelectorAll('.window-body').forEach(b => {
+            b.style.color = '#d4d4d4';
+        });
+
         document.querySelectorAll('.window-body button').forEach(b => {
             b.style.color = '#ffffff';
             b.style.border = '1px solid #333333';
+            b.style.background = 'transparent';
         });
+
         document.querySelectorAll('.window-body input, .window-body textarea').forEach(i => {
             i.style.background = '#000000';
             i.style.color = '#ffffff';
             i.style.border = '1px solid #2a2a2a';
         });
+
+        document.querySelectorAll('.todo-item, .note-item').forEach(i => {
+            i.style.color = '#aaaaaa';
+            i.style.borderBottom = '1px solid #111111';
+        });
+
+        document.querySelectorAll('.timer-display').forEach(d => {
+            d.style.color = '#ffffff';
+        });
+
+        document.querySelectorAll('.window-body label').forEach(l => {
+            l.style.color = '#888888';
+        });
+
+        document.querySelectorAll('.window-body p').forEach(p => {
+            p.style.color = '#aaaaaa';
+        });
+
+        document.querySelectorAll('.app').forEach(a => {
+            a.style.color = '#cccccc';
+            a.style.borderColor = '#333333';
+        });
+
+        document.querySelectorAll('#app-content').forEach(c => {
+            c.style.background = '#000000';
+            c.style.borderColor = '#1a1a1a';
+            c.style.color = '#d4d4d4';
+        });
+
+        document.querySelectorAll('#app-content p').forEach(p => {
+            p.style.color = '#444444';
+        });
+
+        document.querySelectorAll('.window-close').forEach(c => {
+            c.style.color = '#666666';
+        });
+
+        document.querySelectorAll('.window-close:hover').forEach(c => {
+            c.style.color = '#ffffff';
+        });
+
+        document.querySelectorAll('.resize-handle').forEach(r => {
+            r.style.background = 'transparent';
+        });
+
+        document.querySelectorAll('#time').forEach(t => {
+            t.style.color = '#ffffff';
+            t.style.fontWeight = '700';
+        });
+
+        document.querySelectorAll('#weather').forEach(w => {
+            w.style.color = '#aaaaaa';
+        });
+
+        document.querySelectorAll('#search').forEach(s => {
+            s.style.color = '#ffffff';
+            s.style.background = '#000000';
+            s.style.borderColor = '#333333';
+        });
+
+        if (quote) quote.style.color = '#555555';
+
+        if (appContent) {
+            appContent.style.background = '#000000';
+            appContent.style.borderColor = '#1a1a1a';
+            appContent.style.color = '#d4d4d4';
+        }
+
+        document.querySelectorAll('.window-body #spotify-status').forEach(s => {
+            s.style.color = '#888888';
+        });
+
+        document.querySelectorAll('.window-body hr').forEach(h => {
+            h.style.borderColor = '#222222';
+        });
+
+        document.querySelectorAll('.window-body p[style*="color:#555"]').forEach(p => {
+            p.style.color = '#555555';
+        });
     }
+
     localStorage.setItem('os-theme', theme);
 }
 
 function setFontSize(size) {
     const os = document.getElementById('os');
+    const windows = document.querySelectorAll('.window');
+    const appContent = document.getElementById('app-content');
+    const topbar = document.getElementById('topbar');
+    const searchContainer = document.getElementById('search-container');
+    const apps = document.getElementById('apps');
+    const quote = document.getElementById('quote');
+    
+    let fontSize = '16px';
+    let topbarSize = '1rem';
+    let appSize = '0.8rem';
+    let quoteSize = '0.9rem';
+    
     if (size === 'small') {
-        os.style.fontSize = '12px';
+        fontSize = '12px';
+        topbarSize = '0.8rem';
+        appSize = '0.7rem';
+        quoteSize = '0.8rem';
     } else if (size === 'large') {
-        os.style.fontSize = '20px';
+        fontSize = '20px';
+        topbarSize = '1.2rem';
+        appSize = '0.9rem';
+        quoteSize = '1rem';
     } else {
-        os.style.fontSize = '16px';
+        fontSize = '16px';
+        topbarSize = '1rem';
+        appSize = '0.8rem';
+        quoteSize = '0.9rem';
     }
+    
+    os.style.fontSize = fontSize;
+    
+    windows.forEach(w => {
+        w.style.fontSize = fontSize;
+    });
+    
+    if (appContent) {
+        appContent.style.fontSize = fontSize;
+    }
+    
+    if (topbar) {
+        topbar.style.fontSize = topbarSize;
+    }
+    
+    if (searchContainer) {
+        searchContainer.style.fontSize = fontSize;
+    }
+    
+    if (apps) {
+        apps.style.fontSize = fontSize;
+    }
+    
+    if (quote) {
+        quote.style.fontSize = quoteSize;
+    }
+    
+    document.querySelectorAll('.app').forEach(a => {
+        a.style.fontSize = appSize;
+    });
+    
+    document.querySelectorAll('.window-body').forEach(b => {
+        b.style.fontSize = fontSize;
+    });
+    
+    document.querySelectorAll('.window-title').forEach(t => {
+        t.style.fontSize = appSize;
+    });
+    
     localStorage.setItem('os-fontsize', size);
 }
 
@@ -516,9 +691,12 @@ function loadSettings() {
     const theme = localStorage.getItem('os-theme');
     const fontSize = localStorage.getItem('os-fontsize');
     if (theme) setTheme(theme);
-    if (fontSize) setFontSize(fontSize);
+    if (fontSize) {
+        setFontSize(fontSize);
+    } else {
+        setFontSize('medium');
+    }
 }
-
 loadSettings();
 
 function showQuote() {
@@ -540,7 +718,6 @@ function showQuote() {
         quoteEl.textContent = '💬 ' + quotes[random];
     }
 }
-
 showQuote();
 
 function addTodo(id) {
@@ -580,13 +757,61 @@ function deleteTodo(index) {
     });
 }
 
+function playSpotifyEmbed() {
+    const urlInput = document.getElementById('spotify-url');
+    const container = document.getElementById('spotify-embed-container');
+    const status = document.getElementById('spotify-status');
+    if (!urlInput || !urlInput.value.trim()) {
+        if (status) status.textContent = '❌ Please paste a Spotify URL';
+        return;
+    }
+    let url = urlInput.value.trim();
+    if (!url.includes('spotify.com')) {
+        if (status) status.textContent = '❌ Please paste a valid Spotify URL';
+        return;
+    }
+    let embedUrl = url;
+    if (url.includes('/track/') || url.includes('/album/') || url.includes('/playlist/')) {
+        embedUrl = url.replace('open.spotify.com', 'open.spotify.com/embed');
+    }
+    container.innerHTML = `
+        <iframe src="${embedUrl}" style="width:100%; height:80px; border-radius:8px; border:1px solid #333;" allow="encrypted-media"></iframe>
+    `;
+    if (status) status.textContent = '🎵 Now playing...';
+}
+
+function playYouTube() {
+    const container = document.getElementById('youtube-container');
+    const status = document.getElementById('spotify-status');
+    const searchQuery = prompt('Enter a song name to search on YouTube:');
+    if (!searchQuery) return;
+    const query = encodeURIComponent(searchQuery + ' audio');
+    const embedUrl = `https://www.youtube.com/embed?listType=search&list=${query}`;
+    container.innerHTML = `
+        <iframe src="${embedUrl}" style="width:100%; height:200px; border-radius:8px; border:1px solid #333;" allowfullscreen></iframe>
+    `;
+    if (status) status.textContent = '▶️ YouTube playing: ' + searchQuery;
+}
+
+function playSampleAudio() {
+    const container = document.getElementById('youtube-container');
+    const status = document.getElementById('spotify-status');
+    const sampleUrl = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+    container.innerHTML = `
+        <audio controls style="width:100%; border-radius:8px;">
+            <source src="${sampleUrl}" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    `;
+    if (status) status.textContent = '🎵 Sample audio loaded';
+}
+
 let pongAnimations = {};
 
 function initPong(id) {
     const canvas = document.getElementById('pong-' + id);
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-
     const container = canvas.parentElement;
     if (container) {
         const maxWidth = container.clientWidth - 10;
@@ -595,11 +820,9 @@ function initPong(id) {
             canvas.style.height = (maxWidth * 320 / 560) + 'px';
         }
     }
-
     const paddleWidth = 10;
     const paddleHeight = 70;
     const ballSize = 8;
-
     let leftY = 125;
     let rightY = 125;
     let ballX = 280;
@@ -608,26 +831,22 @@ function initPong(id) {
     let ballSpeedY = 3;
     let leftScore = 0;
     let rightScore = 0;
-
     let upPressed = false;
     let downPressed = false;
     let wPressed = false;
     let sPressed = false;
-
     const keyHandler = (e, val) => {
         if (e.key === 'ArrowUp') upPressed = val;
         if (e.key === 'ArrowDown') downPressed = val;
         if (e.key === 'w' || e.key === 'W') wPressed = val;
         if (e.key === 's' || e.key === 'S') sPressed = val;
     };
-
     document.addEventListener('keydown', (e) => keyHandler(e, true));
     document.addEventListener('keyup', (e) => keyHandler(e, false));
 
     function draw() {
         ctx.fillStyle = '#000000';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-
         ctx.strokeStyle = '#222222';
         ctx.setLineDash([8, 12]);
         ctx.beginPath();
@@ -635,33 +854,26 @@ function initPong(id) {
         ctx.lineTo(canvas.width/2, canvas.height);
         ctx.stroke();
         ctx.setLineDash([]);
-
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(8, leftY, paddleWidth, paddleHeight);
         ctx.fillRect(canvas.width - 8 - paddleWidth, rightY, paddleWidth, paddleHeight);
-
         ctx.fillStyle = '#ffffff';
         ctx.beginPath();
         ctx.arc(ballX, ballY, ballSize, 0, Math.PI * 2);
         ctx.fill();
-
         ctx.font = '18px Space Mono';
         ctx.fillStyle = '#444444';
         ctx.fillText(leftScore, canvas.width/2 - 35, 30);
         ctx.fillText(rightScore, canvas.width/2 + 25, 30);
-
         if (wPressed && leftY > 0) leftY -= 5;
         if (sPressed && leftY < canvas.height - paddleHeight) leftY += 5;
         if (upPressed && rightY > 0) rightY -= 5;
         if (downPressed && rightY < canvas.height - paddleHeight) rightY += 5;
-
         ballX += ballSpeedX;
         ballY += ballSpeedY;
-
         if (ballY - ballSize < 0 || ballY + ballSize > canvas.height) {
             ballSpeedY = -ballSpeedY;
         }
-
         if (ballX - ballSize < 8 + paddleWidth &&
             ballX + ballSize > 8 &&
             ballY > leftY &&
@@ -669,7 +881,6 @@ function initPong(id) {
             ballSpeedX = -ballSpeedX;
             ballX = 8 + paddleWidth + ballSize;
         }
-
         if (ballX + ballSize > canvas.width - 8 - paddleWidth &&
             ballX - ballSize < canvas.width - 8 &&
             ballY > rightY &&
@@ -677,7 +888,6 @@ function initPong(id) {
             ballSpeedX = -ballSpeedX;
             ballX = canvas.width - 8 - paddleWidth - ballSize;
         }
-
         if (ballX < 0) {
             rightScore++;
             resetBall();
@@ -695,7 +905,6 @@ function initPong(id) {
         }
         pongAnimations[id] = requestAnimationFrame(draw);
     }
-
     if (pongAnimations[id]) cancelAnimationFrame(pongAnimations[id]);
     draw();
 }

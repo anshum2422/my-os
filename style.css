@@ -39,6 +39,10 @@ body {
 #time {
     color: #ffffff;
     font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.3s ease;
 }
 
 #weather {
@@ -89,6 +93,14 @@ body {
     color: #000000;
 }
 
+#quote {
+    color: #555555;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
 #apps {
     display: flex;
     gap: 8px;
@@ -120,10 +132,14 @@ body {
     padding: 24px;
     min-height: 180px;
     border: 1px solid #1a1a1a;
+    transition: all 0.3s ease;
 }
 
 #app-content p {
     color: #444444;
+    text-align: center;
+    padding: 30px 0;
+    font-size: 0.9rem;
 }
 
 #window-container {
@@ -147,6 +163,7 @@ body {
     box-shadow: 0 20px 60px rgba(0,0,0,0.95);
     display: none;
     z-index: 1000;
+    transition: all 0.3s ease;
 }
 
 .window-header {
@@ -275,6 +292,14 @@ body {
     color: #ff4444;
 }
 
+.window-body label {
+    color: #888888;
+}
+
+.window-body p {
+    color: #aaaaaa;
+}
+
 .resize-handle {
     position: absolute;
     bottom: 0;
@@ -298,7 +323,6 @@ body {
     #os {
         padding: 18px 14px;
     }
-
     #topbar {
         font-size: 0.8rem;
         flex-direction: column;
@@ -306,33 +330,46 @@ body {
         gap: 4px;
         text-align: center;
     }
-
     #search-container {
         flex-direction: column;
         gap: 8px;
     }
-
     #search-container button {
         width: 100%;
         padding: 12px;
     }
-
     #apps {
         justify-content: center;
     }
-
     .app {
         padding: 8px 14px;
         font-size: 0.7rem;
     }
-
     .window {
         min-width: 90%;
         left: 5% !important;
         top: 10% !important;
     }
-
     .window-body .timer-display {
         font-size: 2.2rem;
     }
+}
+
+body.light-mode #time {
+    color: #000000 !important;
+    font-weight: 900 !important;
+}
+
+body.light-mode #weather {
+    color: #333333 !important;
+}
+
+body.light-mode #search {
+    color: #000000 !important;
+    background: #ffffff !important;
+    border-color: #cccccc !important;
+}
+
+body.light-mode #search::placeholder {
+    color: #999999 !important;
 }
